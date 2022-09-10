@@ -5,9 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property string mac
+ * @property-read UrvObject urv_object
  */
 
 class FirebirdController extends Model
@@ -17,7 +20,8 @@ class FirebirdController extends Model
         'mac'
     ];
 
-    public function config(): BelongsTo {
-        return $this->belongsTo(Config::class);
+    public function urv_object(): HasOne
+    {
+        return $this->hasOne(UrvObject::class);
     }
 }
