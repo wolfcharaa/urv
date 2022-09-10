@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
-use Illuminate\Database\Eloquent\JsonEncodingException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Nette\Utils\Json;
+use Psy\Util\Json;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class EventController extends Controller
@@ -30,6 +28,13 @@ class EventController extends Controller
         $event = Event::query()->find($id);
         return new JsonResponse($event);
     }
+
+   public function getLast(int $id)
+   {
+       // TODO дописать
+       $event = Event::query()->find($id);
+       return new JsonResponse($event);
+   }
 
     public function delete(int $id) {
         $event = Event::query()

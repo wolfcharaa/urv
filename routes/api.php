@@ -1,19 +1,32 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers as Cn;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+/**
+ * Работа с контроллерами Эра
+ */
+Route::middleware('api')->group(function () {
+   Route::put('/firebird_controller', [Cn\FirebirdControllerController::class, 'createOrUpdate']);
+});
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+/**
+ * Работа с объектами системы
+ */
+Route::middleware('api')->group(function () {
+    Route::post('/urv_object', [Cn\UrvObjectController::class, 'create']);
+    Route::get('/urv_object', [Cn\UrvObjectController::class, 'getAll']);
+    Route::get('/urv_object/{id}', [Cn\UrvObjectController::class, 'getOne']);
+    Route::put('/urv_object/{id}', [Cn\UrvObjectController::class, 'update']);
+    Route::delete('/urv_object/{id}', [Cn\UrvObjectController::class, 'delete']);
+    Route::get('/urv_object/{id}', [Cn\UrvObjectController::class, 'checkFirebirdStatus']);
+
+});
+
+/**
+ * Работа с событиями
+ */
+
+Route::middleware('api')->group(function () {
+    Route::get('/event', [Cn\EventController::class, '']);
 });
