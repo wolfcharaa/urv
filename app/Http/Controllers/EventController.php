@@ -3,20 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\UrvObject;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Psy\Util\Json;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class EventController extends Controller
 {
-    public function add(Request $request) {
-        $data = $request->toArray();
+    public function create(Request $request) {
+        $requestData = $request->toArray();
         $event = new Event();
-        $event->event_time = $data['event_time'];
-        $event->name = $data['name'];
-        $event->screen_url = $data['screen_url'];
-        $event->screen_path = $data['screen_path'];
+        $event->event_time = Carbon::createFromFormat('Y/m/d', $requestData['event_time']);
+        $event->name = $requestData['name']; //TODO имя убрать в юзера urvUser
+        $event->screen_url = $requestData['screen_url'];
+        $event->screen_path = $requestData['screen_path'];
+        $event->event_status_id = $requestData['status'];
+        $urvObject = UrvObject::query()
+            ->where('name', '=', $requestData['urv_object'])
+            ->first();
+        $event->urv_object()->associate($urvObject);
         $event->save();
     }
 
@@ -29,10 +35,9 @@ class EventController extends Controller
         return new JsonResponse($event);
     }
 
-   public function getLast(int $id)
+   public function getLast()
    {
-       // TODO дописать
-       $event = Event::query()->find($id);
+       $event = Event::query()->latest()->first();
        return new JsonResponse($event);
    }
 
@@ -47,9 +52,21 @@ class EventController extends Controller
     }
 
 
-    public function update(Request $request, Event $event)
+    public function update(int $id, Request $request)
     {
-
+        $event = Event::query()
+            ->find($id);
+        $requestData = $request->toArray();
+        $event->event_time = Carbon::createFromFormat('Y/m/d', $requestData['event_time']);
+        $event->name = $requestData['name']; //TODO имя убрать в юзера urvUser
+        $event->screen_url = $requestData['screen_url'];
+        $event->screen_path = $requestData['screen_path'];
+        $event->event_status_id = $requestData['status'];
+        $urvObject = UrvObject::query()
+            ->where('name', '=', $requestData['urv_object'])
+            ->first();
+        $event->urv_object()->associate($urvObject);
+        $event->save();
     }
 
 }
