@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('urv_objects', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('description');
             $table->string('address')->nullable();
         });
@@ -24,7 +24,6 @@ return new class extends Migration
            $table->id();
            $table->timestamps();
            $table->string('mac')->unique();
-           $table->foreignId('urv_object_id')->unique()->constrained();
         });
         Schema::create('event_statuses', function (Blueprint $table) {
             $table->id();
@@ -38,7 +37,7 @@ return new class extends Migration
             $table->foreignId('event_status_id')->constrained();
             $table->string('screen_url');
             $table->string('screen_path');
-            $table->foreignId('urv_objects_id')->constrained();
+            $table->foreignId('urv_object_id')->constrained();
         });
         Schema::create('configs', function (Blueprint $table) {
             $table->id();

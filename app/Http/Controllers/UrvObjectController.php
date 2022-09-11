@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Event;
 use App\Models\UrvObject;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UrvObjectController extends Controller
 {
@@ -54,7 +52,7 @@ class UrvObjectController extends Controller
     public function checkFirebirdStatus(int $id) {
         /** @var UrvObject $urvObject */
         $urvObject =  UrvObject::query()->find($id);
-        $firebird = $urvObject->firebird_controller;
+        $firebird = $urvObject->config->firebird_controller;
         return new JsonResponse($firebird->status);
     }
 }

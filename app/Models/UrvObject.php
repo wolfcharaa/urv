@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
+ * @property int id
  * @property string name
  * @property string description
  * @property string address
- * @property FirebirdController firebird_controller
+ * @property Config config
  */
 class UrvObject extends Model
 {
@@ -21,16 +23,12 @@ class UrvObject extends Model
         'address',
     ];
 
-    public function config(): BelongsTo {
-        return $this->belongsTo(Config::class);
+    public function config(): HasOne {
+        return $this->hasOne(Config::class);
     }
 
-    public function events(): HasMany {
-        return $this->hasMany(Event::class);
-    }
-
-    public function firebird_controller(): BelongsTo
+    public function events(): HasMany
     {
-        return $this->belongsTo(FirebirdController::class);
+        return $this->hasMany(Event::class);
     }
 }

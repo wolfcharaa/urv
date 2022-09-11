@@ -3,25 +3,25 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property string mac
  * @property string status
- * @property-read UrvObject urv_object
  *
  */
 
 class FirebirdController extends Model
 {
-    protected $table = 'firebird_controller';
+    protected $table = 'firebird_controllers';
     protected $fillable = [
         'mac',
         'status',
     ];
 
-    public function urv_object(): HasOne
+    public function config(): HasOne
     {
-        return $this->hasOne(UrvObject::class);
+        return $this->hasOne(Config::class);
     }
 }

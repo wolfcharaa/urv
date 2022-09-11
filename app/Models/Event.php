@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string name
  * @property string screen_url
  * @property string screen_path
+ * @property int event_status_id
  * @property UrvObject urv_object
  */
 

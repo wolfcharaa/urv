@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int screen_delta_second
  * @property int max_events_count
  * @property-read UrvObject urv_object
- * @property-read FirebirdController firebird_controller
+ * @property FirebirdController firebird_controller
  */
 class Config extends Model
 {
@@ -38,13 +39,13 @@ class Config extends Model
         'max_events_count',
     ];
 
-    public function urv_object(): HasOne
+    public function urv_object(): BelongsTo
     {
-        return $this->hasOne(UrvObject::class);
+        return $this->belongsTo(UrvObject::class);
     }
 
-    public function firebird_controller(): HasOne
+    public function firebird_controller(): BelongsTo
     {
-        return $this->hasOne(FirebirdController::class);
+        return $this->belongsTo(FirebirdController::class);
     }
 }
