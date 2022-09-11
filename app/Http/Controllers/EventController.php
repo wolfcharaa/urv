@@ -54,6 +54,7 @@ class EventController extends Controller
 
     public function update(int $id, Request $request)
     {
+        /** @var Event $event */
         $event = Event::query()
             ->find($id);
         $requestData = $request->toArray();

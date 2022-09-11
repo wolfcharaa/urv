@@ -2,34 +2,53 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use App\Models\UrvObject;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UrvObjectController extends Controller
 {
-    public function create(Request $request) {
-        $data = $request->toArray();
-        $urv_object = new UrvObjectController();
-        $urv_object->event_time = $data['event_time'];
-
-        $urv_object->save();
+    public function create(Request $request)
+    {
+        $requestData = $request->toArray();
+        $urvObject = new UrvObject();
+        $urvObject->name = $requestData['name'];
+        $urvObject->description = $requestData['description'];
+        $urvObject->address = $requestData['address'];
+        $urvObject->save();
     }
 
-    public function getOne(int $id) {
-
+    public function getOne(int $id)
+    {
+        $urvObject = UrvObject::query()->find($id);
+        return new JsonResponse($urvObject);
     }
 
-    public function getAll() {
-
+    public function getAll()
+    {
+        return new JsonResponse(UrvObject::all());
     }
 
-    public function update(int $id) {
-
+    public function update(int $id, Request $request)
+    {
+        /** @var UrvObject $urvObject */
+        $urvObject = UrvObject::query()
+            ->find($id);
+        $requestData = $request->toArray();
+        $urvObject->name = $requestData['name']; //TODO имя убрать в юзера urvUser
+        $urvObject->description = $requestData['description'];
+        $urvObject->address = $requestData['address'];
+        $urvObject->save();
     }
 
-    public function delete(int $id) {
-
+    public function delete(int $id)
+    {
+        $urvObject = UrvObject::query()
+            ->findOrFail($id);
+        $urvObject->delete();
+        return new JsonResponse('Успешно удалено');
     }
 
     public function checkFirebirdStatus(int $id) {
