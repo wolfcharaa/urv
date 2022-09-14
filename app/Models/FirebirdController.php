@@ -24,4 +24,5 @@ class FirebirdController extends Model
     {
         return $this->hasOne(Config::class);
     }
+
 }
