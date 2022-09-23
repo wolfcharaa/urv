@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
+     * Создание таблиц баз данных
      * Run the migrations.
      *
      * @return void
@@ -59,6 +60,7 @@ return new class extends Migration
     }
 
     /**
+     * Удаление таблиц баз данных в обратном порядке для исключения возможности получить ошибку
      * Reverse the migrations.
      *
      * @return void

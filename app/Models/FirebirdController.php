@@ -14,6 +14,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class FirebirdController extends Model
 {
+    /**
+     * Создание модели данных в базе
+     */
     protected $table = 'firebird_controllers';
     protected $fillable = [
         'mac',
@@ -22,6 +25,7 @@ class FirebirdController extends Model
 
     public function config(): HasOne
     {
+        /** Связь один к одному с классом Config */
         return $this->hasOne(Config::class);
     }
 

@@ -16,6 +16,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class UrvObject extends Model
 {
+    /**
+     * Создание модели данных в базе
+     */
     protected $table = 'urv_objects';
     protected $fillable= [
         'name',
@@ -23,12 +26,19 @@ class UrvObject extends Model
         'address',
     ];
 
-    public function config(): HasOne {
+    public function config(): HasOne
+    {
+        /**
+         * Связь один к одному с классом Config
+         */
         return $this->hasOne(Config::class);
     }
 
     public function events(): HasMany
     {
+        /**
+         * Связь один ко многим с классом Event
+         */
         return $this->hasMany(Event::class);
     }
 }

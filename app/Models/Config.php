@@ -24,6 +24,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class Config extends Model
 {
+    /**
+     * Создание модели данных в базе
+     */
     protected $table = 'configs';
     protected $fillable = [
         'server_ip',
@@ -41,11 +44,17 @@ class Config extends Model
 
     public function urv_object(): BelongsTo
     {
+        /**
+         * Обратная взаимосвязь с классом UrvObject
+         */
         return $this->belongsTo(UrvObject::class);
     }
 
     public function firebird_controller(): BelongsTo
     {
+        /**
+         * Обратная взаимосвязь с классом FirebirdController
+         */
         return $this->belongsTo(FirebirdController::class);
     }
 }

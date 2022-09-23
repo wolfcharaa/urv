@@ -7,11 +7,15 @@ use App\Models\FirebirdController;
 use App\Models\UrvObject;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ConfigController extends Controller
 {
     public function getOne(int $id) {
-        /** @var UrvObject $urvObject */
+        /** @var UrvObject $urvObject
+         * Запрос в базу данных на вывод всех данный заданного ID
+         */
         $urvObject = UrvObject::query()->find($id);
         $config = $urvObject->config;
         return new JsonResponse($config);
@@ -19,9 +23,13 @@ class ConfigController extends Controller
 
     public function update(int $id, Request $request) {
         $requestData = $request->toArray();
-        /** @var UrvObject $urvObject */
+        /** @var UrvObject $urvObject
+         * Поиск по базе данных запрашиваемого ID
+         */
         $urvObject = UrvObject::query()->find($id);
-        /** @var Config $config */
+        /** @var Config $config
+         * Обновление-замена данных
+         */
         $config = $urvObject->config;
         $config->cam_guid = $requestData['cam_guid'];
         $config->server_ip = $requestData['server_ip'];
@@ -41,9 +49,17 @@ class ConfigController extends Controller
 
     public function create(int $id, Request $request) {
         $requestData = $request->toArray();
-        /** @var UrvObject $urvObject */
+        /** @var UrvObject $urvObject
+         * Поиск по базе данных заданного ID
+         */
         $urvObject = UrvObject::query()->find($id);
-        /** @var Config $config */
+        if ($urvObject === null) {
+            throw new HttpException(418, 'Не найден объект с id ' . $id);
+        }
+
+        /** @var Config $config
+         * При отстутсвии по заданному ID данных, создание новых
+         */
         $config = new Config();
         $config->cam_guid = $requestData['cam_guid'];
         $config->server_ip = $requestData['server_ip'];
@@ -60,7 +76,6 @@ class ConfigController extends Controller
         if($firebirdController === null) {
             $firebirdController = new FirebirdController();
             $firebirdController->mac = $requestData['mac'];
-            $firebirdController->urv_object()->associate($urvObject);
             $firebirdController->save();
         }
         $config->urv_object()->associate($urvObject);

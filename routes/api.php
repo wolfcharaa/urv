@@ -21,6 +21,10 @@ Route::middleware('api')->group(function () {
     Route::put('/urv_object/{id}', [Cn\UrvObjectController::class, 'update']);
     Route::delete('/urv_object/{id}', [Cn\UrvObjectController::class, 'delete']);
     Route::get('/urv_object/{id}/check_firebird', [Cn\UrvObjectController::class, 'checkFirebirdStatus']);
+
+/**
+ * Работа с config
+ */
     Route::get('/urv_object/{id}/config', [Cn\ConfigController::class, 'getOne']);
     Route::put('/urv_object/{id}/config', [Cn\ConfigController::class, 'update']);
     Route::post('/urv_object/{id}/config', [Cn\ConfigController::class, 'create']);
@@ -32,22 +36,16 @@ Route::middleware('api')->group(function () {
 Route::middleware('api')->group(function () {
     Route::get('/event', [Cn\EventController::class, '']);
     Route::get('/event/last', [Cn\EventController::class, 'getLast']);
+    Route::get('/event/get_from_firebird', [Cn\EventController::class, 'getFromFirebird']);
     Route::get('/event/{id}', [Cn\EventController::class, 'get']);
+
     Route::delete('/event/{id}', [Cn\EventController::class, 'delete']);
+
     Route::post('/event', [Cn\EventController::class, 'create']);
+
     Route::put('/event/{id}', [Cn\EventController::class, 'update']);
+
 
 });
 
-/**
- * Работа с config
- */
 
-Route::middleware('api')->group(function () {
-    Route::get('/event', [Cn\EventController::class, '']);
-    Route::get('/event/{id}', [Cn\EventController::class, 'get']);
-    Route::delete('/event/{id}', [Cn\EventController::class, 'delete']);
-    Route::post('/event', [Cn\EventController::class, 'create']);
-    Route::put('/event/{id}', [Cn\EventController::class, 'update']);
-
-});

@@ -25,15 +25,15 @@ class FirebirdDataBase
                                   string $address,
                                   string $mac,
                                   string $path = 'C:\Program Files (x86)\ENT\Server\DB\CBASE.FDB'): FirebirdDataBase {
-        $fb = new FirebirdDataBase();
-        $fb->connect(
+        $firebirdDataBase = new FirebirdDataBase();
+        $firebirdDataBase->connect(
             login:    $login,
             password: $password,
             address:  $address,
             mac:      $mac,
             path:     $path
         );
-        return $fb;
+        return $firebirdDataBase;
     }
 
     /**
@@ -57,7 +57,9 @@ class FirebirdDataBase
     }
 
     /**
+     * Условие: Поиск интересующих нас данных из удалённой базы
      * Получение последних $limit значений
+     * Использование новой фичи с добавлением точки с пробелами до и после для возможности использования переменных
      * @param int $limit Количество последних записей
      * @return FirebirdData[] Список из строчек таблицы в формате stdClass
      */
