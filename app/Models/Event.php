@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string screen_path
  * @property int event_status_id
  * @property UrvObject urv_object
+ * @property string uid
+ *
  */
 
 class Event extends Model
@@ -21,12 +23,14 @@ class Event extends Model
      * Создание модели данных в базе
      */
     protected $table = 'events';
-    protected $fillable = [
+    protected $fillable =
+        [
         'event_time',
         'name',
         'screen_url',
         'screen_path',
-    ];
+        'uid',
+        ];
 
     public function status()
     {

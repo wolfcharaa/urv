@@ -35,6 +35,7 @@ class FirebirdInfoUpdate extends Command
          */
         $urvObject = UrvObject::query()->find(1);
         $firebirdData = $this->requestFromFirebird($urvObject, 10);
+        var_dump($firebirdData);
         $this->postSaveDatabaseFromFirebirdToUrvObject($firebirdData, $urvObject);
     }
 
@@ -56,20 +57,26 @@ class FirebirdInfoUpdate extends Command
         return $firebirdDataBase->getLastEvents($limit);
     }
 
+    /**
+     * Поиск по всей базе данных после подключения к базе данных через контроллер Firebird ->
+     * Создание и заполненние нового списка Event (объектов) с необходимыми нам полями, ассоциированая с классом
+     * urv_object и дальнешее сохранение данных в таблице */
     private function postSaveDatabaseFromFirebirdToUrvObject(array $firebirdDataArray, UrvObject $urvObject)
     {
-        /** @var FirebirdData $oneFirebirdData
-         * Поиск по всей базе данных после подключения к базе данных через контроллер Firebird ->
-         * Создание и заполненние нового списка Event (объектов) с необходимыми нам полями, ассоциированая с классом
-         * urv_object и дальнешее сохранение данных в таблице
-         */
-        foreach ($firebirdDataArray as $oneFireBirdData) {
+        /** @var FirebirdData $oneFireBirdData */
+        foreach (array_reverse($firebirdDataArray) as $oneFireBirdData) {
+            $uid = $urvObject->name . '_' . $oneFireBirdData->ID;
+            $event = Event::query()->where('uid', '=', $uid)->first();
+            if ($event !== null) {
+                continue;
+            }
             $event = new Event();
             $event->event_time = Carbon::createFromFormat('Y-m-d H:i:s', $oneFireBirdData->DT);
             $event->name = $oneFireBirdData->FIO;
             $event->screen_url = '5464';
             $event->screen_path = '8764356';
             $event->event_status_id = $oneFireBirdData->EVN;
+            $event->uid = $uid;
             $event->urv_object()->associate($urvObject);
             $event->save();
         }

@@ -39,6 +39,7 @@ return new class extends Migration
             $table->string('screen_url');
             $table->string('screen_path');
             $table->foreignId('urv_object_id')->constrained();
+
         });
         Schema::create('configs', function (Blueprint $table) {
             $table->id();
