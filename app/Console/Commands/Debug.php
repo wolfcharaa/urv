@@ -29,10 +29,11 @@ class Debug extends Command
     public function handle()
     {
         $test = FirebirdDataBase::create(
-            login:    'sysdba',
+            login: 'sysdba',
             password: 'Request11',
-            address:  'sophia.icstech.ru',
-            mac:      '000B3A00347E');
+            address: 'sophia.icstech.ru',
+            mac: '000B3A00347E',
+            port: 3060);
 
         $events = $test->getLastEvents(5);
         $event = $events[0];

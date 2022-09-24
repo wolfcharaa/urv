@@ -12,11 +12,11 @@ class FirebirdDataBase
 
     /**
      * Данная функция создаёт подключение к базе данных контроллера firebird
-     * @param string $login     логин к базе данных
-     * @param string $password  пароль к базе данных
-     * @param string $address   домен или ip-адресс в формате address:port
-     * @param string $mac       мак адрес контроллера с УРВ
-     * @param string $path      путь к базе данных, по умолчанию как на виртуальной машин
+     * @param string $login логин к базе данных
+     * @param string $password пароль к базе данных
+     * @param string $address домен или ip-адресс в формате address:port
+     * @param string $mac мак адрес контроллера с УРВ
+     * @param string $path путь к базе данных, по умолчанию как на виртуальной машин
      * @return FirebirdDataBase Подключение к базе данных
      *
      */
@@ -24,34 +24,38 @@ class FirebirdDataBase
                                   string $password,
                                   string $address,
                                   string $mac,
-                                  string $path = 'C:\Program Files (x86)\ENT\Server\DB\CBASE.FDB'): FirebirdDataBase {
+                                  int    $port,
+                                  string $path = 'C:\Program Files (x86)\ENT\Server\DB\CBASE.FDB'): FirebirdDataBase
+    {
         $firebirdDataBase = new FirebirdDataBase();
         $firebirdDataBase->connect(
-            login:    $login,
-            password: $password,
-            address:  $address,
-            mac:      $mac,
-            path:     $path
+            login:      $login,
+            password:   $password,
+            address:    $address,
+            port:       $port,
+            mac:        $mac,
+            path:       $path,
         );
         return $firebirdDataBase;
     }
 
     /**
      * Данная функция создаёт подключение к базе данных контроллера firebird
-     * @param string $login     логин к базе данных
-     * @param string $password  пароль к базе данных
-     * @param string $address   домен или ip-адресс в формате address:port
-     * @param string $mac       мак адрес контроллера с УРВ
-     * @param string $path      путь к базе данных, по умолчанию как на виртуальной машин
+     * @param string $login логин к базе данных
+     * @param string $password пароль к базе данных
+     * @param string $address домен или ip-адресс в формате address:port
+     * @param string $mac мак адрес контроллера с УРВ
+     * @param string $path путь к базе данных, по умолчанию как на виртуальной машин
      * @return void
      */
     public function connect(string $login,
                             string $password,
                             string $address,
+                            int    $port,
                             string $mac,
                             string $path = 'C:\Program Files (x86)\ENT\Server\DB\CBASE.FDB')
     {
-        $pdo = new PDO('firebird:dbname=' . $address . ':' . $path . ';charset=utf8', $login, $password);
+        $pdo = new PDO('firebird:dbname=' . $address . '/' . $port . ':' . $path . ';charset=utf8', $login, $password);
         $this->mac = $mac;
         $this->connection = new Connection($pdo);
     }
@@ -63,7 +67,8 @@ class FirebirdDataBase
      * @param int $limit Количество последних записей
      * @return FirebirdData[] Список из строчек таблицы в формате stdClass
      */
-    public function getLastEvents(int $limit) {
+    public function getLastEvents(int $limit)
+    {
         return $this->connection->select("
             SELECT FIRST " . $limit . "
                 FB_EVN.ID , DT, EVN, FB_USR.FIO

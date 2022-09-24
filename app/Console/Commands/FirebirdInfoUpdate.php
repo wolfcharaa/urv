@@ -49,10 +49,11 @@ class FirebirdInfoUpdate extends Command
          */
         $config = $urvObject->config;
         $firebirdDataBase = FirebirdDataBase::create(
-            login: $config->firebird_login,
+            login:    $config->firebird_login,
             password: $config->firebird_password,
-            address: $config->server_ip,
-            mac: $config->firebird_controller->mac
+            address:  $config->server_ip,
+            mac:      $config->firebird_controller->mac,
+            port:     $config->firebird_port
         );
         return $firebirdDataBase->getLastEvents($limit);
     }
