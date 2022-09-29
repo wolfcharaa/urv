@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-/**
+/** Модель данных в таблице urvObject
  * @property int id
  * @property string name
  * @property string description
@@ -16,9 +16,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class UrvObject extends Model
 {
-    /**
-     * Создание модели данных в базе
-     */
     protected $table = 'urv_objects';
     protected $fillable= [
         'name',
@@ -26,19 +23,20 @@ class UrvObject extends Model
         'address',
     ];
 
+
+    /**
+     * Связь один к одному с классом Config
+     */
     public function config(): HasOne
     {
-        /**
-         * Связь один к одному с классом Config
-         */
         return $this->hasOne(Config::class);
     }
 
+    /**
+     * Связь один ко многим с классом Event
+     */
     public function events(): HasMany
     {
-        /**
-         * Связь один ко многим с классом Event
-         */
         return $this->hasMany(Event::class);
     }
 }

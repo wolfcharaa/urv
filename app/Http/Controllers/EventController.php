@@ -12,11 +12,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class EventController extends Controller
 {
+    /** Создание новой записи в базе данных */
     public function create(Request $request)
     {
-        /**
-         * Создание новой записи в базе данных
-         */
+
         $requestData = $request->toArray();
         $event = new Event();
         $event->event_time = Carbon::createFromFormat('Y-m-d H:i:s', $requestData['event_time']); //TODO обновлен формат
@@ -29,39 +28,35 @@ class EventController extends Controller
         $event->save();
     }
 
+    /** Возврат всех записей в базе данных */
     public function getAll()
     {
-        /**
-         * Возврат всех записей в базе данных
-         */
-        return new JsonResponse(Event::all());
+        return view('main_page', [
+            'events' => Event::query()->latest('id')->get()
+        ]);
     }
 
+    /** Поиск даннных по базе при помощи ключа id */
     public function get(int $id)
     {
-        /**
-         * Поиск даннных по базе при помощи ключа id
-         */
         $event = Event::query()->find($id);
         return new JsonResponse($event);
     }
 
+    /** Поиск последних записанных данных в базу
+     *  И показ, без записи в базу данных */
    public function getLast()
    {
-       /** @var Event $event
-        * Поиск последних записанных данных в базу
-        * И показ, без записи в базу данных
-        */
+       /** @var Event $event */
        $event = Event::query()->latest()->first();
        return new JsonResponse($event);
    }
 
+    /** Поиск по ключу id в базе данных Event и удаление данных с записью об успешном исходе
+     * Плюс условие на возможность отсутствие данных по ключу */
     public function delete(int $id)
     {
-        /**
-         * Поиск по ключу id в базе данных Event и удаление данных с записью об успешном исходе
-         * Плюс условие на возможность отсутствие данных по ключу
-         */
+
         $event = Event::query()
             ->find($id);
         if ($event === null) {
@@ -71,12 +66,10 @@ class EventController extends Controller
         return new JsonResponse('Успешно удалено');
     }
 
-
+/** Поиск данных по ключу id и обновленние данных */
     public function update(int $id, Request $request)
     {
-        /** @var Event $event
-         * Поиск данных по ключу id и обновленние данных
-         */
+        /** @var Event $event */
         $event = Event::query()
             ->find($id);
         $requestData = $request->toArray();
@@ -92,14 +85,14 @@ class EventController extends Controller
         $event->save();
     }
 
+
+    /** Выгрузка данных при помощи id прописанных в UrvObject
+     * Добавление функции прописанной в config для подключения к
+     * удалённой базе данных при помози firebird
+     * применение метода gatLastEvent для выгрузки определённых данных, а не всего масива */
     public function getFromFirebird(Request $request) {
         $requestData = $request->toArray();
-        /** @var UrvObject $urvObject
-         * Выгрузка данных при помощи id прописанных в UrvObject
-         * Добавление функции прописанной в config для подключения к
-         * удалённой базе данных при помози firebird
-         * применение метода gatLastEvent для выгрузки определённых данных, а не всего масива
-         */
+        /** @var UrvObject $urvObject */
         $urvObject = UrvObject::query()->find($requestData['urv_object_id']);
         $config = $urvObject->config;
         $firebirdDB = FirebirdDataBase::create(

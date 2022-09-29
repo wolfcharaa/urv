@@ -17,8 +17,8 @@ class FirebirdDataBase
      * @param string $address домен или ip-адресс в формате address:port
      * @param string $mac мак адрес контроллера с УРВ
      * @param string $path путь к базе данных, по умолчанию как на виртуальной машин
+     * @param int $port порт подключения к базе данных
      * @return FirebirdDataBase Подключение к базе данных
-     *
      */
     public static function create(string $login,
                                   string $password,

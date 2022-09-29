@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Config;
 use App\Models\Event;
 use App\Models\UrvObject;
+use App\Service\CameraImage\Trassir\TrassirImage;
 use App\Service\Firebird\FirebirdData;
 use App\Service\Firebird\FirebirdDataBase;
 use Carbon\Carbon;
@@ -71,13 +73,17 @@ class FirebirdInfoUpdate extends Command
             if ($event !== null) {
                 continue;
             }
+            /** @var Config $config */
+            $config = Config::query()->find(13);
             $event = new Event();
-            $event->event_time = Carbon::createFromFormat('Y-m-d H:i:s', $oneFireBirdData->DT);
+            $event->event_time = Carbon::createFromFormat('Y-m-d H:i:s', $oneFireBirdData->DT)->subSeconds(-$config->screen_delta_second);
             $event->name = $oneFireBirdData->FIO;
             $event->screen_url = '5464';
-            $event->screen_path = '8764356';
+            $trassirImage = new TrassirImage($config->server_ip, $config->server_port, $config->sdk_password);
+            $trassirImage->getImageLink($config->cam_guid, $event->event_time);
+            $event->screen_path = $trassirImage->saveImageAndGetPath();
             $event->event_status_id = $oneFireBirdData->EVN;
-            $event->uid = $uid;
+            $event->uid = uniqid($uid);
             $event->urv_object()->associate($urvObject);
             $event->save();
         }

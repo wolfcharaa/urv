@@ -2,26 +2,23 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property Carbon event_time
+ * Модель данных в таблице events
+ * @property string event_time
  * @property string name
  * @property string screen_url
  * @property string screen_path
  * @property int event_status_id
  * @property UrvObject urv_object
  * @property string uid
- *
  */
 
 class Event extends Model
 {
-    /**
-     * Создание модели данных в базе
-     */
+
     protected $table = 'events';
     protected $fillable =
         [
@@ -32,19 +29,19 @@ class Event extends Model
         'uid',
         ];
 
+    /**
+     * Функция для определение статуса у объёкта
+     */
     public function status()
     {
-        /**
-         * Функция для определение статуса у объёкта
-         */
-        return $this->hasOne('event_statuses');
+         return $this->hasOne('event_statuses');
     }
 
+    /**
+     * Обратная взаимосвязь с UrvObject
+     */
     public function urv_object(): BelongsTo
     {
-        /**
-         * Обратная взаимосвязь с UrvObject
-         */
         return $this->belongsTo(UrvObject::class);
     }
 

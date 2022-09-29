@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
+ * Модель данных в таблице configs
  * @property int id
  * @property string server_ip
  * @property int server_port
@@ -22,11 +23,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property-read UrvObject urv_object
  * @property FirebirdController firebird_controller
  */
+
 class Config extends Model
 {
-    /**
-     * Создание модели данных в базе
-     */
     protected $table = 'configs';
     protected $fillable = [
         'server_ip',
@@ -42,19 +41,15 @@ class Config extends Model
         'max_events_count',
     ];
 
+    /** Обратная взаимосвязь с классом UrvObject */
     public function urv_object(): BelongsTo
     {
-        /**
-         * Обратная взаимосвязь с классом UrvObject
-         */
         return $this->belongsTo(UrvObject::class);
     }
 
+    /** Обратная взаимосвязь с классом FirebirdController */
     public function firebird_controller(): BelongsTo
     {
-        /**
-         * Обратная взаимосвязь с классом FirebirdController
-         */
         return $this->belongsTo(FirebirdController::class);
     }
 }

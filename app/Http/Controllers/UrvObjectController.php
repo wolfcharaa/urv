@@ -8,11 +8,10 @@ use Illuminate\Http\Request;
 
 class UrvObjectController extends Controller
 {
+
+    /** Создание новых данных в базе */
     public function create(Request $request)
     {
-        /**
-         * Создание новых данных в базе
-         */
         $requestData = $request->toArray();
         $urvObject = new UrvObject();
         $urvObject->name = $requestData['name'];
@@ -21,28 +20,23 @@ class UrvObjectController extends Controller
         $urvObject->save();
     }
 
+    /** Запрос на вывод данных по заданному ID */
     public function getOne(int $id)
     {
-        /**
-         * Запрос на вывод данных по заданному ID
-         */
         $urvObject = UrvObject::query()->find($id);
         return new JsonResponse($urvObject);
     }
 
+    /** Вывод всех данных в базе */
     public function getAll()
     {
-        /**
-         * Вывод всех данных в базе
-         */
         return new JsonResponse(UrvObject::all());
     }
 
+    /** Обновление данных в определённом ID */
     public function update(int $id, Request $request)
     {
-        /** @var UrvObject $urvObject
-         * Обновление данных в определённом ID
-         */
+        /** @var UrvObject $urvObject */
         $urvObject = UrvObject::query()
             ->find($id);
         $requestData = $request->toArray();
@@ -52,23 +46,22 @@ class UrvObjectController extends Controller
         $urvObject->save();
     }
 
+    /** Поиск данных по заданному ID
+     * И удаление его из базы */
     public function delete(int $id)
     {
-        /**
-         * Поиск данных по заданному ID
-         * И удаление его из базы
-         */
         $urvObject = UrvObject::query()
             ->findOrFail($id);
         $urvObject->delete();
         return new JsonResponse('Успешно удалено');
     }
 
-    public function checkFirebirdStatus(int $id) {
-        /** @var UrvObject $urvObject
-         * Проверка статуса объекта по заданному ID
-         */
-        $urvObject =  UrvObject::query()->find($id);
+
+    /** Проверка статуса объекта по заданному ID */
+    public function checkFirebirdStatus(int $id)
+    {
+        /** @var UrvObject $urvObject */
+        $urvObject = UrvObject::query()->find($id);
         $firebird = $urvObject->config->firebird_controller;
         return new JsonResponse($firebird->status);
     }

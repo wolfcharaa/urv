@@ -8,11 +8,10 @@ use Illuminate\Http\Request;
 
 class FirebirdControllerController extends Controller
 {
+
+    /** Создание новых данных в базе */
     public function create(Request $request)
     {
-        /**
-         * Создание новых данных в базе
-         */
         $data = $request->toArray();
         $firebirdController = new FirebirdController();
         $firebirdController->mac = $data['mac'];
@@ -21,11 +20,10 @@ class FirebirdControllerController extends Controller
         return new JsonResponse($firebirdController);
     }
 
+    /** Обновление данных по заданному ID */
     public function update(int $id, Request $request)
     {
-        /** @var FirebirdController $firebirdController
-         * Обновление данных по заданному ID
-         */
+        /** @var FirebirdController $firebirdController */
         $firebirdController = FirebirdController::query()
             ->find($id);
         $requestData = $request->toArray();

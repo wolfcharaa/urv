@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers as Cn;
 
+
+Route::get('/configs', [Cn\ConfigController::class, 'getAll']);
 /**
  * Работа с контроллерами Эра
  */
@@ -35,6 +37,7 @@ Route::middleware('api')->group(function () {
  */
 Route::middleware('api')->group(function () {
     Route::get('/event', [Cn\EventController::class, '']);
+    Route::get('/urv', [Cn\EventController::class, 'getAll']);
     Route::get('/event/last', [Cn\EventController::class, 'getLast']);
     Route::get('/event/get_from_firebird', [Cn\EventController::class, 'getFromFirebird']);
     Route::get('/event/{id}', [Cn\EventController::class, 'get']);

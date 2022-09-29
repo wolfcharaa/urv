@@ -12,24 +12,30 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ConfigController extends Controller
 {
+    public function getAll() {
+        /** @var Config $config */
+        $configs = Config::all();
+        return view('configs', ['configs' => $configs]);
+    }
+    /**
+     * Запрос в базу данных на вывод всех данный заданного ID
+     */
     public function getOne(int $id) {
-        /** @var UrvObject $urvObject
-         * Запрос в базу данных на вывод всех данный заданного ID
-         */
+        /** @var UrvObject $urvObject */
         $urvObject = UrvObject::query()->find($id);
         $config = $urvObject->config;
         return new JsonResponse($config);
     }
-
+    /**
+     * Поиск по базе данных запрашиваемого ID
+     *
+     * Обновление-замена данных
+     */
     public function update(int $id, Request $request) {
         $requestData = $request->toArray();
-        /** @var UrvObject $urvObject
-         * Поиск по базе данных запрашиваемого ID
-         */
+        /** @var UrvObject $urvObject */
         $urvObject = UrvObject::query()->find($id);
-        /** @var Config $config
-         * Обновление-замена данных
-         */
+        /** @var Config $config */
         $config = $urvObject->config;
         $config->cam_guid = $requestData['cam_guid'];
         $config->server_ip = $requestData['server_ip'];
@@ -47,19 +53,19 @@ class ConfigController extends Controller
         return new JsonResponse($config);
     }
 
+
+/** Поиск по базе данных заданного ID
+ * При отстутсвии по заданному ID данных, создание новых
+ */
     public function create(int $id, Request $request) {
         $requestData = $request->toArray();
-        /** @var UrvObject $urvObject
-         * Поиск по базе данных заданного ID
-         */
+        /** @var UrvObject $urvObject */
         $urvObject = UrvObject::query()->find($id);
         if ($urvObject === null) {
             throw new HttpException(418, 'Не найден объект с id ' . $id);
         }
 
-        /** @var Config $config
-         * При отстутсвии по заданному ID данных, создание новых
-         */
+        /** @var Config $config */
         $config = new Config();
         $config->cam_guid = $requestData['cam_guid'];
         $config->server_ip = $requestData['server_ip'];

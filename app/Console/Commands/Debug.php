@@ -2,8 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Service\Firebird\FirebirdDataBase;
+use App\Models\Config;
+use App\Models\Event;
+use App\Service\CameraImage\Trassir\TrassirImage;
 use Illuminate\Console\Command;
+use Carbon\Carbon;
 
 class Debug extends Command
 {
@@ -28,19 +31,17 @@ class Debug extends Command
      */
     public function handle()
     {
-        $test = FirebirdDataBase::create(
-            login: 'sysdba',
-            password: 'Request11',
-            address: 'sophia.icstech.ru',
-            mac: '000B3A00347E',
-            port: 3060);
-
-        $events = $test->getLastEvents(5);
-        $event = $events[0];
-
-
-        print_r($events);
-        print($event->DT);
-
+        /** @var Config $config */
+        $config = Config::query()->find(13);
+        $test = new TrassirImage($config->server_ip, $config->server_port, $config->sdk_password);
+        /** @var Event $event */
+        $event = Event::query()->find(114);
+        $test->getImageLink(
+            $config->cam_guid, Carbon::createFromFormat('Y-m-d H:i:s', $event->event_time)
+            ->subSeconds($config->screen_delta_second)
+        );
+        var_dump(
+            $test->saveImageAndGetPath()
+        );
     }
 }
